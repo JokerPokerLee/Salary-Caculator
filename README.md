@@ -9,6 +9,6 @@ Check spec.pdf for detailed rules.
 
 #### Usage ####
 
-* Use <Tab> to switch between gross income and pension rate.
+* Use Tab to switch between gross income and pension rate.
 * Use y/m two keys to switch between yearly/monthly mode.
-* Use <BackSpace> to delete the last digit.
+* Use BackSpace to delete the last digit.
