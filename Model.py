@@ -77,6 +77,7 @@ class Model(object):
         self.tax = 0.0
         self.pension = 0.0
         self.nic = 0.0
+        self.net = 0.0
 
     def register_view(self, view):
         self.view = view
@@ -129,7 +130,8 @@ class Model(object):
         chk = self.update(rate=res)
         if chk != "Success":
             return "Error:" + chk
-        return "Success:"
+        msg = judge_income(self.income, self.tax_interval)
+        return "Success:" + msg
 
     def get_tax(self, income):
         tax = 0.0
@@ -156,18 +158,18 @@ class Model(object):
             gross = self.gross
         if rate is None:
             rate = self.rate
-        income = gross
         if self.mode.get() == 'monthly':
-            income *= 12
+            gross *= 12
+        pension = gross * rate / 100.0
+        income = gross - pension
         tax = self.get_tax(income)
-        pension = income * rate / 100.0
         nic = self.get_nic(income)
+        net = income - tax - nic
 
         # the sum of tax, pension and nic should
         # not exceed gross income
-        if nic + pension + tax > income:
+        if nic + tax > income:
             return "Pension rate too high!"
-        income -= tax + pension + nic
 
         # update result
         self.gross = gross
@@ -176,6 +178,8 @@ class Model(object):
         self.tax = tax
         self.pension = pension
         self.nic = nic
-        self.view.display_result(income, tax,
-                                 pension, nic)
+        self.net = net
+        self.view.display_result(gross, pension,
+                                 income, tax,
+                                 nic, net)
         return "Success"

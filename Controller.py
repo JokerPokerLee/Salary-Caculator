@@ -77,9 +77,9 @@ class Controller(object):
             old = self.rate['text']
 
         # get new value by button text
-        if text == 'C':
+        if text == 'Clear':
             new = ""
-        elif text == '<':
+        elif text == 'Delete':
             new = old[:-1]
         else:
             new = old + text
@@ -102,7 +102,10 @@ class Controller(object):
         elif char == chr(8):
             # backSpace need to be
             # converted to '<' character
-            self.on_button_click('<')
+            self.on_button_click('Delete')
+        elif char == 'c':
+            # clear all content
+            self.on_button_click('Clear')
         elif char == 'y':
             # change mode to yearly
             self.model.set_mode('yearly')
@@ -127,11 +130,11 @@ class Controller(object):
                 focus = 'income'
         # set new focus
         self.focus = focus
-        if focus == 'income':
+        if focus == 'rate':
             # change border to indicate focus
             self.income['relief'] = 'ridge'
-            self.rate['relief'] = 'flat'
-        elif focus == 'rate':
+            self.rate['relief'] = 'groove'
+        elif focus == 'income':
             # change border to indicate focus
-            self.income['relief'] = 'flat'
+            self.income['relief'] = 'groove'
             self.rate['relief'] = 'ridge'
