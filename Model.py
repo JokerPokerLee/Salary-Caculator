@@ -73,6 +73,7 @@ class Model(object):
         self.gross = 0.0
         self.rate = 0.0
         # display values
+        self.total = 0.0
         self.income = 0.0
         self.tax = 0.0
         self.pension = 0.0
@@ -108,7 +109,7 @@ class Model(object):
         chk = self.update(gross=res)
         if chk != "Success":
             return "Error:" + chk
-        msg = judge_income(self.income, self.tax_interval)
+        msg = judge_income(self.net, self.tax_interval)
         return "Success:" + msg
 
     def init_rate(self):
@@ -130,7 +131,14 @@ class Model(object):
         chk = self.update(rate=res)
         if chk != "Success":
             return "Error:" + chk
-        msg = judge_income(self.income, self.tax_interval)
+        msg = judge_income(self.net, self.tax_interval)
+        return "Success:" + msg
+
+    def mode_update(self):
+        chk = self.update()
+        if chk != "Success":
+            return "Error:" + chk
+        msg = judge_income(self.net, self.tax_interval)
         return "Success:" + msg
 
     def get_tax(self, income):
@@ -158,10 +166,11 @@ class Model(object):
             gross = self.gross
         if rate is None:
             rate = self.rate
+        total = gross
         if self.mode.get() == 'monthly':
-            gross *= 12
-        pension = gross * rate / 100.0
-        income = gross - pension
+            total *= 12
+        pension = total * rate / 100.0
+        income = total - pension
         tax = self.get_tax(income)
         nic = self.get_nic(income)
         net = income - tax - nic
@@ -174,12 +183,13 @@ class Model(object):
         # update result
         self.gross = gross
         self.rate = rate
+        self.total = total
         self.income = income
         self.tax = tax
         self.pension = pension
         self.nic = nic
         self.net = net
-        self.view.display_result(gross, pension,
+        self.view.display_result(total, pension,
                                  income, tax,
                                  nic, net)
         return "Success"

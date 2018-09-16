@@ -116,7 +116,9 @@ class Controller(object):
             self.on_mode_switch()
 
     def on_mode_switch(self):
-        self.model.update()
+        res = self.model.mode_update().split(':')
+        # display message
+        self.view.display_msg(res[0], res[1])
 
     """
         On income and rate focus change.

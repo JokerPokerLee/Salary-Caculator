@@ -3,7 +3,6 @@
     user interfaces and event reaction bindings.
 """
 
-
 from tk_op import *
 from tkinter import font
 
@@ -26,7 +25,7 @@ class View(object):
         self.clr_height = 2
         # frame heights
         self.tle_height = 30
-        self.res_height = 150
+        self.res_height = 170
         self.msg_height = 25
         self.inp_height = 50
         self.but_height = 160
@@ -41,7 +40,7 @@ class View(object):
         # top level frame
         self.root_frame = None
         # title display panel
-        self. title_frame = None
+        self.title_frame = None
         # result display panel
         self.result_frame = None
         # message display panel
@@ -138,10 +137,10 @@ class View(object):
         row_conf(parent, [0, 2], [10, 1])
         col_conf(parent, [0, 2], [4, 4])
 
-        self.res_panel= create_frame(parent,
-                                     250,
-                                     parent['height'] - 10,
-                                     1, 1)
+        self.res_panel = create_frame(parent,
+                                      250,
+                                      parent['height'] - 10,
+                                      1, 1)
         row_conf(self.res_panel, [0, 3, 6, 9], [5, 5, 5, 5])
         col_conf(self.res_panel, [0, 2, 4], [4, 5, 4])
         self.res_panel['highlightbackground'] = '#ABB2B9'
@@ -288,15 +287,19 @@ class View(object):
         radio_frame['background'] = background
         mode = tk.StringVar()
         self.model.init_mode(mode)
-        create_label(radio_frame, " Mode:", 0, 0,
-                     background=background,
-                     foreground='black')
-        create_radiobutton(radio_frame, "Annual  ", mode,
-                           self.controller.on_mode_switch,
-                           'yearly', 1, 0, background=background)
-        create_radiobutton(radio_frame, "Monthly", mode,
-                           self.controller.on_mode_switch,
-                           'monthly', 2, 0, background=background)
+        custom_font = font.Font(size=9)
+        label = create_label(radio_frame, " Mode:", 0, 0,
+                             background=background,
+                             foreground='black')
+        label['font'] = custom_font
+        radio1 = create_radiobutton(radio_frame, "Annual  ", mode,
+                                    self.controller.on_mode_switch,
+                                    'yearly', 1, 0, background=background)
+        radio1['font'] = custom_font
+        radio2 = create_radiobutton(radio_frame, "Monthly", mode,
+                                    self.controller.on_mode_switch,
+                                    'monthly', 2, 0, background=background)
+        radio2['font'] = custom_font
 
     def display_msg(self, sign, text):
         self.msg_label['text'] = text
@@ -318,11 +321,11 @@ class View(object):
 
 
 if __name__ == '__main__':
-
     view = View()
 
     import Model
     import Controller
+
     model = Model.Model()
     controller = Controller.Controller()
 
